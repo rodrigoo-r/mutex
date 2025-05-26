@@ -8,4 +8,4 @@
  * under certain conditions; type show c' for details.
 */
 
-#include "mutex.h"
+#include "include/fluent/mutex/mutex.h"
