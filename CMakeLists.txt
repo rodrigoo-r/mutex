@@ -3,4 +3,4 @@ project(mutex C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_library(mutex STATIC library.c)
+add_library(mutex STATIC mutex.c)
