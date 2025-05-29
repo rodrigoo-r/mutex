@@ -81,7 +81,7 @@ typedef struct {
  * @param m Pointer to the mutex_t structure to initialize.
  * @return 0 on success, or a non-zero error code on failure (POSIX only).
  */
-inline int mutex_init(mutex_t *m) {
+static inline int mutex_init(mutex_t *m) {
 #   ifdef _WIN32
     InitializeCriticalSection(&m->cs);
     return 0;
@@ -97,7 +97,7 @@ inline int mutex_init(mutex_t *m) {
  *
  * @param m Pointer to the mutex_t structure to lock.
  */
-inline void mutex_lock(mutex_t *m) {
+static inline void mutex_lock(mutex_t *m) {
 #   ifdef _WIN32
     EnterCriticalSection(&m->cs);
 #   else
@@ -112,7 +112,7 @@ inline void mutex_lock(mutex_t *m) {
  *
  * @param m Pointer to the mutex_t structure to unlock.
  */
-inline void mutex_unlock(mutex_t *m) {
+static inline void mutex_unlock(mutex_t *m) {
 #   ifdef _WIN32
     LeaveCriticalSection(&m->cs);
 #   else
@@ -127,7 +127,7 @@ inline void mutex_unlock(mutex_t *m) {
  *
  * @param m Pointer to the mutex_t structure to destroy.
  */
-inline void mutex_destroy(mutex_t *m) {
+static inline void mutex_destroy(mutex_t *m) {
 #   ifdef _WIN32
     DeleteCriticalSection(&m->cs);
 #   else
