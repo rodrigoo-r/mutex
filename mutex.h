@@ -51,8 +51,7 @@
 // ----------------------------------------
 
 #ifdef _WIN32
-// Pending Windows implementation review
-//#   include <windows.h>
+#   include <windows.h>
 #else
 #   include <pthread.h>
 #endif
@@ -70,8 +69,7 @@ extern "C" {
  */
 typedef struct {
 #ifdef _WIN32
-// Pending Windows implementation review
-//    CRITICAL_SECTION cs;   /**< Windows critical section */
+    CRITICAL_SECTION cs;   /**< Windows critical section */
 #else
     pthread_mutex_t mutex; /**< POSIX mutex */
 #endif
@@ -85,8 +83,7 @@ typedef struct {
  */
 static inline int mutex_init(mutex_t *m) {
 #   ifdef _WIN32
-    // Pending Windows implementation review
-//    InitializeCriticalSection(&m->cs);
+    InitializeCriticalSection(&m->cs);
     return 0;
 #   else
     return pthread_mutex_init(&m->mutex, NULL);
@@ -102,8 +99,7 @@ static inline int mutex_init(mutex_t *m) {
  */
 static inline void mutex_lock(mutex_t *m) {
 #   ifdef _WIN32
-    // Pending Windows implementation review
-//    EnterCriticalSection(&m->cs);
+    EnterCriticalSection(&m->cs);
 #   else
     pthread_mutex_lock(&m->mutex);
 #   endif
@@ -118,8 +114,7 @@ static inline void mutex_lock(mutex_t *m) {
  */
 static inline void mutex_unlock(mutex_t *m) {
 #   ifdef _WIN32
-    // Pending Windows implementation review
-//    LeaveCriticalSection(&m->cs);
+    LeaveCriticalSection(&m->cs);
 #   else
     pthread_mutex_unlock(&m->mutex);
 #   endif
@@ -134,8 +129,7 @@ static inline void mutex_unlock(mutex_t *m) {
  */
 static inline void mutex_destroy(mutex_t *m) {
 #   ifdef _WIN32
-    // Pending Windows implementation review
-//    DeleteCriticalSection(&m->cs);
+    DeleteCriticalSection(&m->cs);
 #   else
     pthread_mutex_destroy(&m->mutex);
 #   endif
