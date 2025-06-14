@@ -8,8 +8,8 @@
  * under certain conditions; type show c' for details.
 */
 
-#ifndef MUTEX_LIBRARY_H
-#define MUTEX_LIBRARY_H
+#ifndef FLUENT_LIBC_MUTEX_LIBRARY_H
+#define FLUENT_LIBC_MUTEX_LIBRARY_H
 
 // ============= FLUENT LIB C =============
 // mutex_t API
@@ -140,4 +140,4 @@ static inline void mutex_destroy(mutex_t *m) {
 }
 #endif
 
-#endif //MUTEX_LIBRARY_H
+#endif //FLUENT_LIBC_MUTEX_LIBRARY_H
