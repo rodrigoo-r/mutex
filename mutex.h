@@ -51,7 +51,10 @@
 // ----------------------------------------
 
 #ifdef _WIN32
-#   include <windows.h>
+#   ifndef FLUENT_LIBC_NO_WINDOWS_SDK
+//     For Windows SDK, include windows.h
+#      include <windows.h>
+#   endif
 #else
 #   include <pthread.h>
 #endif
@@ -69,7 +72,11 @@ extern "C" {
  */
 typedef struct {
 #ifdef _WIN32
+#   ifndef FLUENT_LIBC_NO_WINDOWS_SDK
     CRITICAL_SECTION cs;   /**< Windows critical section */
+    // If the Windows SDK is not included
+    // we can't use CRITICAL_SECTION directly.
+#   endif
 #else
     pthread_mutex_t mutex; /**< POSIX mutex */
 #endif
@@ -83,8 +90,14 @@ typedef struct {
  */
 static inline int mutex_init(mutex_t *m) {
 #   ifdef _WIN32
-    InitializeCriticalSection(&m->cs);
-    return 0;
+#       ifndef FLUENT_LIBC_NO_WINDOWS_SDK
+            InitializeCriticalSection(&m->cs);
+            return 0;
+#       else // FLUENT_LIBC_NO_WINDOWS_SDK
+            // If the Windows SDK is not included, we can't use CRITICAL_SECTION.
+            // Return an error code or handle it as needed.
+            return -1; // Indicating failure to initialize
+#       endif // FLUENT_LIBC_NO_WINDOWS_SDK
 #   else
     return pthread_mutex_init(&m->mutex, NULL);
 #   endif
@@ -99,7 +112,11 @@ static inline int mutex_init(mutex_t *m) {
  */
 static inline void mutex_lock(mutex_t *m) {
 #   ifdef _WIN32
-    EnterCriticalSection(&m->cs);
+#       ifndef FLUENT_LIBC_NO_WINDOWS_SDK
+            EnterCriticalSection(&m->cs);
+#       else // FLUENT_LIBC_NO_WINDOWS_SDK
+            // If the Windows SDK is not included, we can't use CRITICAL_SECTION.
+#       endif
 #   else
     pthread_mutex_lock(&m->mutex);
 #   endif
@@ -114,7 +131,11 @@ static inline void mutex_lock(mutex_t *m) {
  */
 static inline void mutex_unlock(mutex_t *m) {
 #   ifdef _WIN32
-    LeaveCriticalSection(&m->cs);
+#       ifndef FLUENT_LIBC_NO_WINDOWS_SDK
+            LeaveCriticalSection(&m->cs);
+#       else
+            // If the Windows SDK is not included, we can't use CRITICAL_SECTION.
+#       endif
 #   else
     pthread_mutex_unlock(&m->mutex);
 #   endif
@@ -129,7 +150,11 @@ static inline void mutex_unlock(mutex_t *m) {
  */
 static inline void mutex_destroy(mutex_t *m) {
 #   ifdef _WIN32
-    DeleteCriticalSection(&m->cs);
+#       ifndef FLUENT_LIBC_NO_WINDOWS_SDK
+            DeleteCriticalSection(&m->cs);
+#       else // FLUENT_LIBC_NO_WINDOWS_SDK
+            // If the Windows SDK is not included, we can't use CRITICAL_SECTION.
+#       endif
 #   else
     pthread_mutex_destroy(&m->mutex);
 #   endif
